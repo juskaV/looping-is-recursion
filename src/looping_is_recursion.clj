@@ -19,6 +19,8 @@
 (defn seq= [seq1 seq2]
   (cond
     (and (empty? seq1) (empty? seq2)) true
+    (empty? seq1) false
+    (empty? seq2) false
     (not= (first seq1) (first seq2)) false
     :else (recur (rest seq1) (rest seq2))))
 
@@ -53,7 +55,19 @@
 
 
 (defn fast-fibo [n]
-  ":(")
+  (loop [i 1
+         fn-last 0
+         fn-current 1]
+    (cond
+      (zero? n) 0
+      (= i n) fn-current
+      :else (recur (+ i 1) fn-current (+ fn-current fn-last)))))
+
 
 (defn cut-at-repetition [a-seq]
-  [":("])
+  (loop [result []
+         items a-seq]
+   (cond
+     (empty? items) result
+     (some #{(first items)} result) result ;contains? does not always work for vector
+      :else (recur (conj result (first items)) (rest items)))))
